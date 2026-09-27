@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Missing before: without this, mobile browsers render the page at a
+         desktop width (~980px) and zoom it out to fit, so every element is
+         visually tiny and a real finger tap lands off-target even though the
+         underlying layout and @media breakpoints are correct. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>MailSecure — SecureMailScope</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

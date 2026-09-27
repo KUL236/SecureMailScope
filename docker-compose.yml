@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: smsuser
+      POSTGRES_PASSWORD: smspass
+      POSTGRES_DB: securemailscope
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://smsuser:smspass@postgres:5432/securemailscope
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+
+  # Optional, for background job scaling beyond FastAPI BackgroundTasks:
+  # redis:
+  #   image: redis:7
+  #   ports: ["6379:6379"]
+  # worker:
+  #   build: ./backend
+  #   command: celery -A app.worker worker --loglevel=info
+  #   depends_on: [redis, postgres]
+
+volumes:
+  pgdata:
